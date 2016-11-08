@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Shop{% endblock %}
+
+
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Shop</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+              
+                <li style=""><a href="{% url 'shop:seller-view-item' %}">View All Products</a></li>
+                <li style="margin-left:850px;"><a href="#">Welcome <b>{{request.user}}</b></a></li>
+                <li ><a href="{% url 'shop:logout' %}">Logout</a></li>
+               </ul>
+
+        </div>
+  </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+{% block body %}
+
+<div class="container">
+
+  <h1 style="text-align:center;">Add New Product</h1><br>
+  <div>
+  <form id="add_tiem" method="post" enctype="multipart/form-data" class="form-horizontal">
+  {% csrf_token %}
+  {% include 'form_template.html' %}
+
+{% if error %}
+    <p class="text-danger">{{message}}</p>
+{% else %}
+    <p class="text-success">{{message}}</p>
+{% endif %}
+<div class="form-group">
+<input type="submit" class="btn btn-info"  value="Submit">
+</div>
+</form>
+</div>
+</div>
+
+
+</div>
+</body>
+
+{% endblock %}
+

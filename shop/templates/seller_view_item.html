@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Products{% endblock %}
+{% block login_active %}active{% endblock %}
+
+
+
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Shop</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+              
+                <li style=""><a href="{% url 'shop:seller-add-item' %}">Add Products</a></li>
+                <li style="margin-left:850px;"><a href="#">Welcome <b>{{request.user}}</b></a></li>
+                <li ><a href="{% url 'shop:logout' %}">Logout</a></li>
+               </ul>
+        </div>
+  </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+{% block body %}
+
+<div class="container">
+
+  <h1 style="text-align:left;">Products</h1><br><br>
+  <div id="demo" class="collapse">
+  <form role="form" action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% include 'form_template.html' %}
+
+<div class="form-group">
+<input type="submit" class="btn btn-info" value="Submit">
+</div>
+</form>
+</div>
+  <table style="width:auto;" class="table table-bordered table-hover">
+  <col width="630">
+  <col width="100">
+  <col width="100">
+  <thead class="thead-inverse">
+  <tr>
+    <th>Name</th>
+    <th>Price (Rs)</th>
+    <th>Inventory</th>
+    <!-- <th>Image</th> -->
+    </thead>
+  </tr>
+      {% for i in items %}
+  <tr>
+
+    <td>{{i.name}}</td>
+    <td>{{i.price}}</td> 
+    <td>{{i.inventory}}</td>
+    <!-- <td><img class="img-responsive" style="width: 20px; float: left; margin-right: 10px;"  src="{{i.image.url}}"></td> -->
+     </tr>
+      {% endfor %}
+
+</table>
+
+
+  
+
+</div>
+
+
+</div>
+</body>
+
+{% endblock %}
+

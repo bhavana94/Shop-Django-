@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Products{% endblock %}
+{% block login_active %}active{% endblock %}
+
+
+
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Shop</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+              
+                <li class="right" style="position:absolute;right:60px;" class="{% block login_active3 %}{% endblock %}"><a href="{% url 'shop:logout' %}">Logout</a></li>
+
+               </ul>
+            
+
+        </div>
+  </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+{% block body %}
+
+<div class="container">
+
+  <h1>Hello ! {{user}} </h1><br><br>
+
+  <table style="width:100%" class="table table-bordered table-hover">
+  <thead class="thead-inverse">
+  <tr>
+    <th>Name</th>
+    <th>Price</th> 
+    <th>Inventory</th>
+    <th>Seller</th>
+    <th>Order</th>
+    </thead>
+  </tr>
+      {% for i in items %}
+  <tr>
+
+    <td>{{i.name}}</td>
+    <td>{{i.price}}</td> 
+    <td>{{i.inventory}}</td>
+    <td>{{i.seller.user}}</td>
+    <td><a href="{% url 'shop:order_details' i.slug %}" class="btn btn-success"">Order</a></td>
+     </tr>
+      {% endfor %}
+
+</table> 
+</div>
+</div>
+</body>
+
+{% endblock %}
+

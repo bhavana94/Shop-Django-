@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Details{% endblock %}
+{% block albums_active %}active{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Shop</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+              
+                <li class="right" style="position:absolute;right:60px;" class="{% block login_active3 %}{% endblock %}"><a href="{% url 'shop:logout' %}">Logout</a></li>
+
+               </ul>
+            
+
+        </div>
+  </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+{% block body %}
+
+
+<div class="container container-fluid">
+
+                    <h1>Hello ! {{user}} </h1><br>
+
+                    <a href="{% url 'shop:order_details' item.slug %}">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" class="img-responsive">
+                        {% else %}
+                            <h3>No image to display</h3>
+                        {% endif %}
+                    </a>
+                    <div id="content" style="float: right; margin:-230px 200px 10px 100px;">
+                    <h1 >{{ item.name }} </h1>
+                    <h1 >{{ item.seller }}</h1>
+                    <h1 >{{ item.price }}</h1>
+                    <h1 >{{ item.seller.phone }}</h1>
+    
+                    </div>
+</div><br><br><br><br>
+
+<div class="container" style="float: center;">
+
+  
+  <div>
+  <form role="form"  action="" id="add_item" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% include 'form_template.html' %}
+
+{% if error %}
+    <p class="text-danger">{{message}}</p>
+{% else %}
+    <p class="text-success">{{message}}</p>
+{% endif %}
+<div class="form-group">
+<input type="submit" class="btn btn-info"  value="Submit">
+</div>
+</form>
+</div>
+</div>
+
+
+
+{% endblock %}
+
