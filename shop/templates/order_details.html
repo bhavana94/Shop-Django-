@@ -18,7 +18,7 @@
     <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
 
-                <li style=""><a href="{% url 'shop:customer_order' %}">View All Products</a></li>
+                <li style=""><a href="{% url 'shop:customer-order' %}">View All Products</a></li>
                 <li style="margin-left:700px;"><a href="#">Welcome <b>{{request.user}}</b></a></li>
                 <li ><a href="{% url 'shop:logout' %}">Logout</a></li>
                </ul>
@@ -34,7 +34,7 @@
 <div class="container container-fluid">
         
         <span>
-          <a href="{% url 'shop:order_details' item.slug %}">
+          <a href="{% url 'shop:order-details' item.slug %}">
               {% if item.image %}
                   <img src="{{ item.image.url }}" class="" style="width:35%;">
               {% else %}

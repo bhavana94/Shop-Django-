@@ -53,7 +53,7 @@
     <td>{{i.inventory}}</td>
     <td>{{i.seller.user}}</td>
     {% if i.inventory > 0 %}
-      <td><a href="{% url 'shop:order_details' i.slug %}" class="btn btn-success"">Order</a></td>
+      <td><a href="{% url 'shop:order-details' i.slug %}" class="btn btn-success"">Order</a></td>
     {% else %}
       <td><p class="text-danger">Out of Stock</p></td>
     {% endif %}
