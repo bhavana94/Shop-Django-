@@ -1,13 +1,13 @@
 
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-from .models import Seller, Customer, Item, Order, OrderItem
-from .forms import ItemForm, OrderForm
+from .models import Seller, Customer, Item, Order, OrderItem, Coupon
+from .forms import ItemForm
 
 
 @csrf_protect
@@ -145,7 +145,7 @@ def user_must_be_customer(user):
 @login_required
 @user_passes_test(user_must_be_customer)
 def customer_order(request, template='customer_product.html'):
-    items = Item.objects.all()
+    items = Item.objects.all()   # .exclude(inventory=0)
     return render(request, template, {'items': items})
 
 
@@ -155,33 +155,39 @@ def order_details(request, slug, template='order_details.html'):
     item = get_object_or_404(Item, slug=slug)
     if request.method == 'GET':
         data = {
-            'form': OrderForm(),
             'item': item
         }
         return render(request, template, data)
 
     elif request.method == 'POST':
-        user = request.user
-        item_form = OrderForm(request.POST)
-        if item_form.is_valid():
-            item_form.save(commit=False)
-            item_form.customer = user
-            item_form.save()
-            data = {
-                'error': False,
-                'message': 'Order Placed Successfully',
-                'item': item,
-                'user': user
-            }
-            get_oid = Order.objects.all()
-            a = OrderItem.objects.create(item=item, order=get_oid.oid)
-            a.save()
-            item.inventory = item.inventory - a.quantity
-        else:
+        addr = request.POST.get('addr')
+        item_id = request.POST.get('item')
+        coupon = request.POST.get('coupon')
+
+        try:
+            coupon = Coupon.objects.get(code=coupon, is_active=True)
+        except Coupon.DoesNotExist:
             data = {
                 'error': True,
-                'message': "Please provide some data",
-                'item': item,
-                'user': user
+                'message': "Invalid Coupon Code",
+                'item': item
             }
-        return render(request, template, data)
+            return render(request, template, data)
+
+        item = Item.objects.get(id=item_id)
+        item.inventory -= 1
+        item.save()
+
+        o = Order(customer=request.user.customer.first(), shipping_detail=addr)
+        o.discount = float(coupon.value)
+        o.final_price = item.price - float(coupon.value)
+        o.save()
+
+        oi = OrderItem(order=o, item=item)
+        oi.save()
+
+        response_text = """
+        <h3> Order has been placed and order id is: {} </h3>
+        <a href='/customer/'> Go back to product listing page </a>
+        """.format(o.oid)
+        return HttpResponse(response_text)

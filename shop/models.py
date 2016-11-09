@@ -2,7 +2,6 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-from django.conf import settings
 
 
 class TimeStamp(models.Model):
@@ -73,3 +72,13 @@ class OrderItem(TimeStamp):
 
     def __unicode__(self):
         return "{} - {}".format(self.item, self.quantity)
+
+
+class Coupon(TimeStamp):
+
+    value = models.IntegerField()
+    code = models.CharField(max_length=25)
+    is_active = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return "{} - {}".format(self.code, self.value)

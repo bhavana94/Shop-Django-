@@ -17,9 +17,10 @@
 
     <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
-              
-                <li class="right" style="position:absolute;right:60px;" class="{% block login_active3 %}{% endblock %}"><a href="{% url 'shop:logout' %}">Logout</a></li>
 
+                <li style=""><a href="{% url 'shop:customer_order' %}">View All Products</a></li>
+                <li style="margin-left:700px;"><a href="#">Welcome <b>{{request.user}}</b></a></li>
+                <li ><a href="{% url 'shop:logout' %}">Logout</a></li>
                </ul>
             
 
@@ -31,24 +32,24 @@
 
 
 <div class="container container-fluid">
-
-                    <h1>Hello ! {{user}} </h1><br>
-
-                    <a href="{% url 'shop:order_details' item.slug %}">
-                        {% if item.image %}
-                            <img src="{{ item.image.url }}" class="img-responsive">
-                        {% else %}
-                            <h3>No image to display</h3>
-                        {% endif %}
-                    </a>
-                    <div id="content" style="float: right; margin:-230px 200px 10px 100px;">
-                    <h1 >{{ item.name }} </h1>
-                    <h1 >{{ item.seller }}</h1>
-                    <h1 >{{ item.price }}</h1>
-                    <h1 >{{ item.seller.phone }}</h1>
-    
-                    </div>
-</div><br><br><br><br>
+        
+        <span>
+          <a href="{% url 'shop:order_details' item.slug %}">
+              {% if item.image %}
+                  <img src="{{ item.image.url }}" class="" style="width:35%;">
+              {% else %}
+                  <h3>No image to display</h3>
+              {% endif %}
+          </a>
+        </span>
+        <span id="content" style="float:right;margin-right:300px;">
+          <h1>{{ item.name }} </h1>
+          <h3><i style="color:gray;">Price</i>: ₹ {{ item.price }}</h3>
+          <h3><i style="color:gray;">Seller</i>: {{ item.seller }}</h3>
+          <h3><i style="color:gray;">Inventory</i>: {{ item.inventory }}</h3>
+        </span>
+</div>
+<br><br><br><br>
 
 <div class="container" style="float: center;">
 
@@ -56,17 +57,33 @@
   <div>
   <form role="form"  action="" id="add_item" method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {% include 'form_template.html' %}
+
+    <div class="form-group">
+      <label class="control-label" for="coupon">Coupon Code</label>
+      <div class="controls">
+        <input type="text" style="width:20%" name="coupon" placeholder="" class="form-control">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="comment">Shipping Address:</label>
+      <textarea class="form-control" rows="5" name="addr" style="width:50%"></textarea>
+    </div>
+
+    <input type="hidden" name="item" value="{{item.id}}">
+    <div class="form-group">
+      <input type="submit" class="btn btn-info"  value="Submit">
+    </div>
+  </form>
+
+
 
 {% if error %}
     <p class="text-danger">{{message}}</p>
 {% else %}
     <p class="text-success">{{message}}</p>
 {% endif %}
-<div class="form-group">
-<input type="submit" class="btn btn-info"  value="Submit">
 </div>
-</form>
 </div>
 </div>
 
